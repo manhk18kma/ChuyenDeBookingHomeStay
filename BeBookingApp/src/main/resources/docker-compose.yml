@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres-16
+    image: postgis/postgis:16-3.4-alpine
+    platform: linux/amd64  # Thêm dòng này để chỉ định kiến trúc cho container
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456A@}
+      PGDATA: /data/postgres
+    volumes:
+      - cdattt-booking-db:/data/postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  cdattt-booking-db:
