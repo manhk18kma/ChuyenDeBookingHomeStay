@@ -4,7 +4,7 @@ services:
   postgres:
     container_name: postgres-16
     image: postgis/postgis:16-3.4-alpine
-    platform: linux/amd64  # Thêm dòng này để chỉ định kiến trúc cho container
+    platform: linux/amd64  # Đảm bảo sử dụng kiến trúc phù hợp cho Mac Intel
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-root}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456A@}
@@ -17,9 +17,22 @@ services:
       - postgres
     restart: unless-stopped
 
+  redis:
+    container_name: redis
+    image: redis:latest
+    platform: linux/amd64  # Sửa lại kiến trúc cho Mac Intel
+    ports:
+      - "6379:6379"
+    networks:
+      - postgres
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
 networks:
   postgres:
     driver: bridge
 
 volumes:
   cdattt-booking-db:
+  redis-data:
